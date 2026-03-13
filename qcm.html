@@ -1,0 +1,120 @@
+<div class="qcm" id="qcm-champ-uniforme"></div>
+
+<style>
+  .qcm { max-width: 720px; margin: 20px auto; font-family: system-ui, Arial; }
+  .card { border: 1px solid #ddd; border-radius: 12px; padding: 16px; margin: 12px 0; }
+  .q-title { font-weight: 700; margin-bottom: 10px; }
+  .opt { display: block; padding: 10px 12px; border: 1px solid #eee; border-radius: 10px; margin: 8px 0; cursor: pointer; }
+  .opt:hover { background: #fafafa; }
+  .opt.correct { border-color: #3bb54a; background: #eaf8ed; }
+  .opt.wrong { border-color: #e23; background: #ffe9ea; }
+  .feedback { margin-top: 10px; font-size: 0.95rem; }
+  .topbar { display:flex; justify-content: space-between; align-items:center; margin: 10px 0; }
+  .btn { padding: 10px 12px; border: 1px solid #ddd; border-radius: 10px; background: white; cursor: pointer; }
+  .btn:hover { background: #f6f6f6; }
+  .score { font-weight: 700; }
+</style>
+
+<script>
+const qcmData = {
+  chapter: "Mouvement dans un champ uniforme",
+  questions: [
+    {
+      q: "Dans un champ électrique uniforme E, la force sur une charge q est :",
+      options: ["F = qE", "F = E/q", "F = q/E", "F = mg"],
+      answer: 0,
+      explain: "La force électrique dans un champ uniforme vaut F = qE."
+    },
+    {
+      q: "Dans un champ de pesanteur uniforme (sans frottements), l’accélération est :",
+      options: ["Variable selon la vitesse", "Constante et égale à g", "Nulle", "Constante mais dépend de la masse"],
+      answer: 1,
+      explain: "En chute libre sans frottements, l’accélération est constante : g."
+    },
+    {
+      q: "Un mouvement soumis à une accélération constante est :",
+      options: ["Rectiligne uniforme", "Circulaire uniforme", "Uniformément accéléré (MUA)", "Oscillatoire"],
+      answer: 2,
+      explain: "Accélération constante ⇒ mouvement uniformément accéléré."
+    },
+    {
+      q: "Pour une accélération constante a, la vitesse est :",
+      options: ["v(t)=v0+a·t", "v(t)=v0·t", "v(t)=v0+a/t", "v(t)=a·t²"],
+      answer: 0,
+      explain: "La vitesse évolue linéairement : v(t)=v0+a·t."
+    },
+    {
+      q: "Pour a constante, la position sur un axe est :",
+      options: ["x(t)=x0+v0·t+½a·t²", "x(t)=x0+a·t", "x(t)=x0+v0/t", "x(t)=x0+½a/t²"],
+      answer: 0,
+      explain: "La loi horaire complète : x(t)=x0+v0 t + ½ a t²."
+    },
+    {
+      q: "Pour un projectile (champ de pesanteur uniforme), la trajectoire est :",
+      options: ["Une droite", "Un cercle", "Une parabole (si frottements négligés)", "Une ellipse"],
+      answer: 2,
+      explain: "Sans frottements, x(t) est linéaire et y(t) est quadratique ⇒ parabole."
+    }
+  ]
+};
+
+function renderQCM(containerId, data){
+  const el = document.getElementById(containerId);
+  let score = 0;
+  let answered = 0;
+
+  el.innerHTML = `
+    <div class="topbar">
+      <div><strong>QCM :</strong> ${data.chapter}</div>
+      <div class="score" id="${containerId}-score">Score: 0/${data.questions.length}</div>
+    </div>
+    <button class="btn" id="${containerId}-reset">Réinitialiser</button>
+    <div id="${containerId}-list"></div>
+  `;
+
+  const list = document.getElementById(`${containerId}-list`);
+
+  data.questions.forEach((item, idx) => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <div class="q-title">Q${idx+1}. ${item.q}</div>
+      <div class="opts"></div>
+      <div class="feedback" style="display:none;"></div>
+    `;
+    const opts = card.querySelector(".opts");
+    const feedback = card.querySelector(".feedback");
+    let locked = false;
+
+    item.options.forEach((optText, optIdx) => {
+      const opt = document.createElement("div");
+      opt.className = "opt";
+      opt.textContent = `${String.fromCharCode(65+optIdx)}. ${optText}`;
+      opt.addEventListener("click", () => {
+        if (locked) return;
+        locked = true;
+        answered++;
+
+        // Mark answers
+        const all = opts.querySelectorAll(".opt");
+        all[item.answer].classList.add("correct");
+        if (optIdx !== item.answer) opt.classList.add("wrong");
+        else score++;
+
+        feedback.style.display = "block";
+        feedback.innerHTML = `<strong>Explication :</strong> ${item.explain}`;
+        document.getElementById(`${containerId}-score`).textContent = `Score: ${score}/${data.questions.length}`;
+      });
+      opts.appendChild(opt);
+    });
+
+    list.appendChild(card);
+  });
+
+  document.getElementById(`${containerId}-reset`).addEventListener("click", () => {
+    renderQCM(containerId, data);
+  });
+}
+
+renderQCM("qcm-champ-uniforme", qcmData);
+</script>
