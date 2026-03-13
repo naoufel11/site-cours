@@ -19,26 +19,25 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install LaTeX
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y latexmk texlive-latex-extra texlive-fonts-recommended texlive-lang-french
+
       - name: Set up Git identity
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Find LaTeX files
-        id: texfiles
+      - name: Compile all LaTeX files
         run: |
-          find latex -name "*.tex" > texfiles.txt
-          cat texfiles.txt
-
-      - name: Compile LaTeX files
-        uses: xu-cheng/latex-action@v3
-        with:
-          root_file: |
-            $(cat texfiles.txt)
+          find latex -name "*.tex" | while read -r file; do
+            latexmk -pdf -interaction=nonstopmode -halt-on-error "$file"
+          done
 
       - name: Copy PDFs to pdfs/
         run: |
-          while IFS= read -r file; do
+          find latex -name "*.tex" | while read -r file; do
             pdf="${file%.tex}.pdf"
             rel="${pdf#latex/}"
             dest="pdfs/$rel"
@@ -46,7 +45,7 @@ jobs:
             if [ -f "$pdf" ]; then
               cp "$pdf" "$dest"
             fi
-          done < texfiles.txt
+          done
 
       - name: Commit generated PDFs
         run: |
