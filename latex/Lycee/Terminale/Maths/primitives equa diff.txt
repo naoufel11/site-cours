@@ -1,0 +1,251 @@
+\documentclass[11pt,a4paper]{article}
+
+% -------------------- Langue / encodage --------------------
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{array}
+\usepackage{calc}
+
+% -------------------- Mise en page --------------------
+\usepackage{geometry}
+\geometry{
+  a4paper,
+  landscape,
+  left=1.6cm,
+  right=1.6cm,
+  top=1.0cm,
+  bottom=1.2cm
+}
+
+% -------------------- Maths / mise en forme --------------------
+\usepackage{amsmath,amssymb}
+\usepackage{parskip}
+\usepackage[explicit]{titlesec}
+\usepackage[normalem]{ulem} % pour \uline sans casser \emph
+\usepackage{titlesec}
+
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+\usepackage[table]{xcolor} % <-- IMPORTANT : pour \rowcolor dans les tableaux
+\usepackage{paracol}
+
+% -------------------- TikZ + tkz-tab --------------------
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc}
+\usepackage{tkz-tab}
+
+% -------------------- Variables --------------------
+\newcommand{\FicheTitre}{Primitives et équations différentielles -- Fiche de cours}
+\newcommand{\Niveau}{Terminale générale -- Mathématiques}
+\newcommand{\Annee}{Année scolaire 2025/2026}
+
+\newcommand{\SiteURL}{https://naoufel-coursparticuliers.netlify.app/}
+\newcommand{\SiteTexte}{naoufel-coursparticuliers.netlify.app}
+
+% -------------------- Footer --------------------
+\pagestyle{fancy}
+\fancyhf{}
+\lfoot{\textit{\Niveau \;--\; \Annee}}
+\cfoot{\thepage/\pageref{LastPage}}
+\rfoot{\href{\SiteURL}{\texttt{\SiteTexte}}}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+% -------------------- Spacing (anti débordement) --------------------
+\setlength{\parskip}{4pt}
+\setlength{\parindent}{0pt}
+\setlist[itemize]{leftmargin=*, itemsep=2pt, topsep=2pt}
+
+% -------------------- Titres --------------------
+%\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{} %noir
+%\titleformat{\subsection}{\normalsize\bfseries}{\alph{subsection}.}{0.5em}{}\titleformat{\section}
+% --- TITRES colorés + petite ligne sous le TEXTE (sans souligner le numéro) ---
+% SECTION : numéro rouge (non souligné) + titre rouge souligné
+\titleformat{\section}[hang]
+  {\normalsize\bfseries}
+  {\textcolor{red}{\thesection.}}
+  {0.2em}
+  {\textcolor{red}{\uline{#1}}}
+
+% SUBSECTION : lettre verte (non soulignée) + titre vert souligné
+\titleformat{\subsection}[hang]
+  {\normalsize\bfseries}
+  {\hspace*{1.2em}\textcolor{green!60!black}{\thesubsection}}
+  {0.4em}
+  {\textcolor{green!60!black}{\uline{#1}}}
+
+
+
+% -------------------- Bandeau titre --------------------
+\newcommand{\TitreBandeau}[1]{%
+  \noindent\hrule
+  \vspace{0.55em}
+  \begin{center}
+    {\LARGE\bfseries #1}
+  \end{center}
+  \vspace{0.55em}
+  \noindent\hrule
+  \vspace{0.9em}
+}
+
+% -------------------- Helpers --------------------
+\newcommand{\defi}{\textbf{Définition :} }
+\newcommand{\prop}{\textbf{Propriété :} }
+\newcommand{\rem}{\textbf{Remarque :} }
+
+% ============================
+% Tableau 1 : Primitives usuelles (2 colonnes)
+% ============================
+\newcommand{\TableauPrimitivesUsuelles}{%
+\begin{center}
+\setlength{\tabcolsep}{10pt}
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{|>{\centering\arraybackslash}m{0.43\linewidth}|>{\centering\arraybackslash}m{0.43\linewidth}|}
+\hline
+\rowcolor{blue!15}\textbf{Fonction $f(x)$} & \textbf{Une primitive $F(x)$} \\
+\hline
+$a$ (constante) & $ax$ \\
+\hline
+$x$ & $\dfrac{x^{2}}{2}$ \\
+\hline
+$x^{n}\ (n\in\mathbb{Z},\ n\neq -1)$ & $\dfrac{x^{n+1}}{n+1}$ \\
+\hline
+$\dfrac{1}{x}$ & $\ln(x)$ \\
+\hline
+$\dfrac{1}{x^{n}}\ (n\in\mathbb{Z},\ n\neq 1)$ & $-\dfrac{1}{(n-1)x^{n-1}}$ \\
+\hline
+$\dfrac{1}{\sqrt{x}}$ & $2\sqrt{x}$ \\
+\hline
+$\sin(x)$ & $-\cos(x)$ \\
+\hline
+$\cos(x)$ & $\sin(x)$ \\
+\hline
+$e^{x}$ & $e^{x}$ \\
+\hline
+\end{tabular}
+\end{center}
+
+}
+
+% ============================
+% Tableau 2 : Primitives de fonctions composées (2 colonnes)
+% ============================
+\newcommand{\TableauPrimitivesComposees}{%
+\begin{center}
+\setlength{\tabcolsep}{10pt}
+\renewcommand{\arraystretch}{1.8}
+\begin{tabular}{|>{\centering\arraybackslash}m{0.43\linewidth}|>{\centering\arraybackslash}m{0.43\linewidth}|}
+\hline
+\rowcolor{blue!15}\textbf{Fonction $f(x)$ de la forme} & \textbf{Une primitive $F(x)$} \\
+\hline
+
+$u'\,u^{n}\ (n\neq -1;0)$ & $\dfrac{u^{n+1}}{n+1}$ \\
+\hline
+$\dfrac{u'}{u}$ & $\ln|u|$ \\
+\hline
+$\dfrac{u'}{u^{2}}$ & $-\dfrac{1}{u}$ \\
+\hline
+$\dfrac{u'}{\sqrt{u}}$ & $2\sqrt{u}$ \\
+\hline
+$u'\,e^{u}$ & $e^{u}$ \\
+\hline
+$u'\,\cos(u)$ & $\sin(u)$ \\
+\hline
+$u'\,\sin(u)$ & $-\cos(u)$ \\
+\hline
+$(v'\!\circ u)\,u'$ & $v\!\circ u$ \\
+
+
+\hline
+\end{tabular}
+\end{center}
+
+}
+
+\begin{document}
+
+\TitreBandeau{\FicheTitre}
+
+% -------------------- 2 colonnes + ligne verticale --------------------
+\columnratio{0.5,0.5}
+\setlength{\columnsep}{1.2cm}
+\setlength{\columnseprule}{0.6pt}
+\def\columnseprulecolor{\color{black}}
+
+\begin{paracol}{2}
+
+% ====== COLONNE GAUCHE ======
+\section{Équation différentielle $y'=f$}
+
+\defi Une équation différentielle est une équation dans laquelle
+l'inconnue est une fonction et où intervient au moins une de ses dérivées.
+
+\subsection{Primitive d'une fonction continue sur un intervalle}
+\defi On dit que $F$ est une \textbf{primitive} de $f$ sur un intervalle $I$
+lorsque $F$ est dérivable sur $I$ et
+\[
+F'(x)=f(x)\quad \text{pour tout } x\in I.
+\]
+\prop Toute fonction \textbf{continue} sur un intervalle admet des primitives sur cet intervalle
+(\textit{à une constante près}).
+
+\subsection{Primitives usuelles (référence)}
+\TableauPrimitivesUsuelles
+
+% >>> Basculer sur la colonne de droite <<<
+\switchcolumn
+\setcounter{section}{1}
+\setcounter{subsection}{2}
+
+\subsection{Primitives de fonctions composées}
+\TableauPrimitivesComposees
+
+
+
+% ====== COLONNE DROITE ======
+\setcounter{section}{1}
+
+\section{Équation différentielle $y'=ay$}
+
+\prop L'équation différentielle $y'=ay$ est une équation différentielle linéaire homogène
+du premier ordre (sans second membre).
+
+Les solutions sont de la forme :
+\[
+y(x)=Ce^{ax}\qquad (C\in\mathbb{R})
+\]
+\rem Pour déterminer $C$, on utilise une condition (valeur initiale, point imposé, etc.).
+
+% >>> Basculer sur la colonne de droite <<<
+\switchcolumn
+\setcounter{section}{2}
+
+
+\section{Équation différentielle $y'=ay+b\ (a\neq 0)$}
+Les solutions de l'équation différentielle $y'=ay+b$ sont de la forme :
+\[
+y(x)=Ce^{ax}-\frac{b}{a}\qquad (C\in\mathbb{R})
+\]
+\rem Pour déterminer $C$, on utilise une condition.
+
+\section{Équation différentielle $y'=ay+f\ \ (a\neq 0)$}
+Les solutions de l'équation différentielle $y'=ay+f(x)$ sont de la forme :
+\[
+y(x)=Ce^{ax}+\varphi(x)\qquad (C\in\mathbb{R})
+\]
+où $\varphi(x)$ est une fonction de même nature que $f(x)$ (solution particulière adaptée à $f$).
+
+\rem Pour déterminer $C$, on utilise une condition.
+
+\section{Principe de résolution des équations différentielles}
+\prop
+\[
+\text{Solution générale}=\text{Solution homogène}+\text{Solution particulière}.
+\]
+\rem On commence par résoudre l'équation homogène associée, puis on ajoute une solution particulière
+du second membre (quand il y en a un).
+
+\end{paracol}
+\end{document}

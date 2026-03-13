@@ -1,0 +1,284 @@
+\documentclass[11pt,a4paper]{article}
+
+% -------------------- Langue / encodage --------------------
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{array}
+
+% -------------------- Mise en page --------------------
+\usepackage{geometry}
+\geometry{
+  a4paper,
+  landscape,
+  left=1.6cm,
+  right=1.6cm,
+  top=1.0cm,
+  bottom=1.2cm
+}
+
+% -------------------- Maths / mise en forme --------------------
+
+
+\usepackage{amsmath,amssymb}
+\usepackage{parskip}
+\usepackage[explicit]{titlesec}
+\usepackage[normalem]{ulem} % pour \uline sans casser \emph
+\usepackage{titlesec}
+
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+\usepackage[table]{xcolor} % <-- IMPORTANT : pour \rowcolor dans les tableaux
+\usepackage{paracol}
+
+
+% -------------------- TikZ (graphique pro) --------------------
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc}
+\usepackage{tkz-tab}
+
+
+% ============================
+% Graphique propre et cadré
+% ============================
+\newcommand{\GraphDroiteAB}[4]{%
+\begin{center}
+\begin{tikzpicture}[
+    scale=0.6,
+    >=Latex,
+    every node/.style={font=\small}
+]
+
+% Fenêtre compacte
+\def\xmin{-4} 
+\def\xmax{6}
+\def\ymin{-3} 
+\def\ymax{3}
+
+% Grille
+\draw[step=1, very thin, blue!30] (\xmin,\ymin) grid (\xmax,\ymax);
+
+% Axes
+\draw[very thick, ->] (\xmin,0) -- (\xmax+0.2,0);
+\draw[very thick, ->] (0,\ymin) -- (0,\ymax+0.2);
+
+% Points
+\coordinate (A) at (#1,#2);
+\coordinate (B) at (#3,#4);
+
+% Calcul pente
+\pgfmathsetmacro{\a}{(#4-#2)/(#3-#1)}
+\pgfmathsetmacro{\b}{#2-\a*#1}
+
+% Tracé de la droite limité à la fenêtre
+\draw[thick, domain=\xmin:\xmax] 
+    plot (\x, {\a*\x+\b});
+
+% Points A et B
+\fill[blue] (A) circle (3pt);
+\fill[blue] (B) circle (3pt);
+\node[blue, below left] at (A) {$A$};
+\node[blue, above right] at (B) {$B$};
+
+% Origine
+\node[below left] at (0,0) {$O$};
+
+\end{tikzpicture}
+\end{center}
+}
+
+
+% -------------------- Variables --------------------
+\newcommand{\FicheTitre}{Fonctions affines -- Fiche de cours}
+\newcommand{\Niveau}{Seconde générale -- Mathématiques}
+\newcommand{\Annee}{Année scolaire 2025/2026}
+
+\newcommand{\SiteURL}{https://naoufel-coursparticuliers.netlify.app/}
+\newcommand{\SiteTexte}{naoufel-coursparticuliers.netlify.app}
+
+% -------------------- Footer --------------------
+\pagestyle{fancy}
+\fancyhf{}
+\lfoot{\textit{\Niveau \;--\; \Annee}}
+\cfoot{\thepage/\pageref{LastPage}}
+\rfoot{\href{\SiteURL}{\texttt{\SiteTexte}}}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+% -------------------- Spacing (anti débordement) --------------------
+\setlength{\parskip}{4pt}
+\setlength{\parindent}{0pt}
+\setlist[itemize]{leftmargin=*, itemsep=2pt, topsep=2pt}
+
+% -------------------- Titres --------------------
+% -------------------- Titres --------------------
+%\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{} %noir
+%\titleformat{\subsection}{\normalsize\bfseries}{\alph{subsection}.}{0.5em}{}\titleformat{\section}
+% --- TITRES colorés + petite ligne sous le TEXTE (sans souligner le numéro) ---
+% SECTION : numéro rouge (non souligné) + titre rouge souligné
+\titleformat{\section}[hang]
+  {\Large\bfseries}
+  {\textcolor{red}{\thesection.}}
+  {0.2em}
+  {\textcolor{red}{\uline{#1}}}
+
+% SUBSECTION : lettre verte (non soulignée) + titre vert souligné
+\titleformat{\subsection}[hang]
+  {\normalsize\bfseries}
+  {\hspace*{1.2em}\textcolor{green!60!black}{\thesubsection}}
+  {0.4em}
+  {\textcolor{green!60!black}{\uline{#1}}}
+
+
+% -------------------- Bandeau titre --------------------
+\newcommand{\TitreBandeau}[1]{%
+  \noindent\hrule
+  \vspace{0.55em}
+  \begin{center}
+    {\LARGE\bfseries #1}
+  \end{center}
+  \vspace{0.55em}
+  \noindent\hrule
+  \vspace{0.9em}
+}
+
+% -------------------- Helpers --------------------
+\newcommand{\defi}{\textbf{Définition :} }
+\newcommand{\prop}{\textbf{Propriété :} }
+\newcommand{\rem}{\textbf{Remarque :} }
+
+% -------------------- Graphique TikZ : droite passant par A et B --------------------
+% Usage : \GraphDroiteAB{Ax}{Ay}{Bx}{By}
+\providecommand{\GraphDroiteAB}[4]{%
+\begin{center}
+\resizebox{0.95\linewidth}{!}{% <-- force à rentrer dans la colonne
+\begin{tikzpicture}[
+  >=Latex,
+  every node/.style={font=\small}
+]
+  % Fenêtre (ajuste si tu veux)
+  \def\xmin{-6} \def\xmax{6}
+  \def\ymin{-3} \def\ymax{3}
+
+  % Grille
+  \draw[step=1, very thin, blue!25] (\xmin,\ymin) grid (\xmax,\ymax);
+
+  % Axes
+  \draw[very thick, ->] (\xmin,0) -- (\xmax+0.3,0);
+  \draw[very thick, ->] (0,\ymin) -- (0,\ymax+0.3);
+
+  % Graduations
+  \foreach \x in {\xmin,...,\xmax} \draw[thick] (\x,0.12) -- (\x,-0.12);
+  \foreach \y in {\ymin,...,\ymax} \draw[thick] (0.12,\y) -- (-0.12,\y);
+
+  % Origine + vecteurs i, j
+  \node[below left] at (0,0) {$O$};
+  \node at (0.55,-0.55) {$\vec{i}$};
+  \node at (-0.55,0.55) {$\vec{j}$};
+
+  % Points
+  \coordinate (A) at (#1,#2);
+  \coordinate (B) at (#3,#4);
+
+  % Droite prolongée
+  \draw[thick] ($(A)!-10!(B)$) -- ($(A)!10!(B)$);
+
+  % Points + labels
+  \fill[blue] (A) circle (3.5pt);
+  \fill[blue] (B) circle (3.5pt);
+  \node[blue, left] at (A) {$A$};
+  \node[blue, right] at (B) {$B$};
+
+\end{tikzpicture}%
+}%
+\end{center}
+}
+
+
+\begin{document}
+
+\TitreBandeau{\FicheTitre}
+
+% -------------------- 2 colonnes "enchaînées" + ligne verticale --------------------
+\columnratio{0.5,0.5}
+\setlength{\columnsep}{1.2cm}
+\setlength{\columnseprule}{0.6pt}
+\def\columnseprulecolor{\color{black}}
+
+\begin{paracol}{2}
+
+% ====== COLONNE GAUCHE ======
+\section{Équation d'une droite}
+
+\subsection{Définition}
+\defi Dans un repère, une droite peut s’écrire :
+\[
+\begin{cases}
+x=c & \text{si la droite est parallèle à l'axe des ordonnées} \\
+y=ax+b & \text{si la droite n'est pas parallèle à l'axe des ordonnées}
+\end{cases}
+\]
+
+\prop Pour $y=ax+b$ :
+\begin{itemize}
+  \item $a$ est le \textbf{coefficient directeur} (pente)
+  \item $b$ est l'\textbf{ordonnée à l'origine} : la droite passe par $(0\,;b)$
+\end{itemize}
+
+% -------- Graphique (exemple) --------
+% Change les coordonnées pour ton cours :
+% Ici : A(-2,-1) et B(3,1)
+\GraphDroiteAB{-2}{2}{4}{-1}
+
+\subsection{Déterminer $a$ et $b$ avec deux points}
+Soient $A(x_A;y_A)$ et $B(x_B;y_B)$ avec $x_A\neq x_B$ :
+\[
+a=\frac{y_B-y_A}{x_B-x_A}
+\qquad
+b=y_A-ax_A
+\]
+\rem Si $x_A=x_B$, la droite est \textbf{verticale} : $x=x_A$.
+
+
+% >>> Basculer sur la colonne de droite <<<
+\switchcolumn
+\setcounter{section}{1} % <-- pour que "Variations" devienne 2.
+
+
+\section{Variations}
+Pour $f(x)=ax+b$ :
+\begin{itemize}
+  \item si $a>0$, $f$ est \textbf{croissante}
+  \item si $a<0$, $f$ est \textbf{décroissante}
+  \item si $a=0$, $f$ est \textbf{constante} : $f(x)=b$ (droite horizontale)
+\end{itemize}
+
+\section{Signe de $ax+b$ (inéquations)}
+\subsection{Zéro de $ax+b$}
+Si $a\neq 0$ :
+\[
+ax+b=0 \iff x=-\frac{b}{a}
+\]
+
+
+% ====== COLONNE DROITE ======
+\subsection{Tableau de signe}
+
+\begin{center}
+\begin{tikzpicture}
+  \tkzTabInit{$x$/1, $ax+b$/1}{$-\infty$, $-\dfrac{b}{a}$, $+\infty$}
+  \tkzTabLine{, $\text{signe de }-a$, z, $\text{signe de }a$, }
+\end{tikzpicture}
+\end{center}
+
+\section{À retenir}
+\begin{itemize}
+  \item Droite affine : $y=ax+b$
+  \item $a=\dfrac{\Delta y}{\Delta x}$ ; $b=f(0)$.
+  \item $ax+b=0 \iff x=-\dfrac{b}{a}$ (si $a\neq 0$).
+\end{itemize}
+
+\end{paracol}
+
+\end{document}

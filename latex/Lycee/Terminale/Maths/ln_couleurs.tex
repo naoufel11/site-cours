@@ -1,0 +1,259 @@
+\documentclass[11pt,a4paper]{article}
+
+% -------------------- Langue / encodage --------------------
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{array}
+
+% -------------------- Mise en page --------------------
+\usepackage{geometry}
+\geometry{
+  a4paper,
+  landscape,
+  left=1.6cm,
+  right=1.6cm,
+  top=1.0cm,
+  bottom=1.2cm
+}
+
+
+% -------------------- Maths / mise en forme --------------------
+\usepackage{amsmath,amssymb}
+\usepackage{parskip}
+\usepackage[explicit]{titlesec}
+\usepackage[normalem]{ulem} % pour \uline sans casser \emph
+\usepackage{titlesec}
+
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+\usepackage[table]{xcolor} % <-- IMPORTANT : pour \rowcolor dans les tableaux
+\usepackage{paracol}
+
+% -------------------- TikZ + tkz-tab --------------------
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc}
+\usepackage{tkz-tab}
+
+% -------------------- Variables --------------------
+\newcommand{\FicheTitre}{Logarithme népérien -- Fiche de cours}
+\newcommand{\Niveau}{Terminale générale -- Mathématiques}
+\newcommand{\Annee}{Année scolaire 2025/2026}
+
+\newcommand{\SiteURL}{https://naoufel-coursparticuliers.netlify.app/}
+\newcommand{\SiteTexte}{naoufel-coursparticuliers.netlify.app}
+
+% -------------------- Footer --------------------
+\pagestyle{fancy}
+\fancyhf{}
+\lfoot{\textit{\Niveau \;--\; \Annee}}
+\cfoot{\thepage/\pageref{LastPage}}
+\rfoot{\href{\SiteURL}{\texttt{\SiteTexte}}}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+% -------------------- Spacing (anti débordement) --------------------
+\setlength{\parskip}{4pt}
+\setlength{\parindent}{0pt}
+\setlist[itemize]{leftmargin=*, itemsep=2pt, topsep=2pt}
+
+
+% -------------------- Titres --------------------
+%\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{} %noir
+%\titleformat{\subsection}{\normalsize\bfseries}{\alph{subsection}.}{0.5em}{}\titleformat{\section}
+% --- TITRES colorés + petite ligne sous le TEXTE (sans souligner le numéro) ---
+% SECTION : numéro rouge (non souligné) + titre rouge souligné
+\titleformat{\section}[hang]
+  {\normalsize\bfseries}
+  {\textcolor{red}{\thesection.}}
+  {0.2em}
+  {\textcolor{red}{\uline{#1}}}
+
+% SUBSECTION : lettre verte (non soulignée) + titre vert souligné
+\titleformat{\subsection}[hang]
+  {\normalsize\bfseries}
+  {\hspace*{1.2em}\textcolor{green!60!black}{\thesubsection}}
+  {0.4em}
+  {\textcolor{green!60!black}{\uline{#1}}}
+% -------------------- Bandeau titre --------------------
+\newcommand{\TitreBandeau}[1]{%
+  \noindent\hrule
+  \vspace{0.55em}
+  \begin{center}
+    {\LARGE\bfseries #1}
+  \end{center}
+  \vspace{0.55em}
+  \noindent\hrule
+  \vspace{0.9em}
+}
+
+% -------------------- Helpers --------------------
+\newcommand{\defi}{\textbf{Définition :} }
+\newcommand{\prop}{\textbf{Propriété :} }
+\newcommand{\rem}{\textbf{Remarque :} }
+
+% ============================
+% Graphique "grand" de y = ln(x)
+% ============================
+\newcommand{\GraphLn}{%
+\begin{center}
+\resizebox{0.65\linewidth}{!}{% <-- plus grand que 0.95
+\begin{tikzpicture}[>=Latex, every node/.style={font=\small}]
+  % Fenêtre (un peu plus large/haute)
+  \def\xmin{-1} \def\xmax{7}
+  \def\ymin{-3.5} \def\ymax{3.5}
+
+  % Grille
+  \draw[step=1, very thin, blue!25] (\xmin,\ymin) grid (\xmax,\ymax);
+
+  % Axes
+  \draw[very thick, ->] (\xmin,0) -- (\xmax+0.2,0);
+  \draw[very thick, ->] (0,\ymin) -- (0,\ymax+0.2);
+  \node[below left] at (0,0) {$O$};
+
+  % Asymptote x=0
+  \draw[dashed, thick] (0,\ymin) -- (0,\ymax);
+  \node[above right] at (0,\ymax) {\small $y=ln(x)$};
+   % Asymptote y=0
+  \draw[dashed, thick] (\xmin,0) -- (\xmax,0);
+  \node[above right] at (\xmax,0) {\small $x$};
+  
+
+  % Courbe y=ln(x)
+  \draw[thick, domain=0.06:\xmax, samples=250]
+    plot (\x, {ln(\x)});
+
+  % Points repères : 1, e, 2
+  \fill (1,0) circle (2.6pt);
+  \node[below] at (1,0) {$1$};
+
+
+  \fill ({exp(1)},1) circle (2.6pt);
+  \node[above right] at ({exp(1)},1) {\small $(e,1)$};
+
+  \node[above right] at (5.2,{ln(5.2)}) {\small $y=\ln(x)$};
+\end{tikzpicture}%
+}%
+\end{center}
+}
+
+\begin{document}
+
+\TitreBandeau{\FicheTitre}
+
+% -------------------- 2 colonnes + ligne verticale --------------------
+\columnratio{0.5,0.5}
+\setlength{\columnsep}{1.2cm}
+\setlength{\columnseprule}{0.6pt}
+\def\columnseprulecolor{\color{black}}
+
+\begin{paracol}{2}
+
+% ====== COLONNE GAUCHE ======
+\section{Définition et propriétés}
+
+\subsection{Définition (fonction réciproque de exp)}
+\defi La fonction \textbf{logarithme népérien}, notée $\ln$, est définie sur
+$\mathbb{R}_+^*=]0,+\infty[$ et vérifie :
+\[
+\ln(x)=y \iff e^{\,y}=x
+\]
+\subsection{Propriétés de calcul}
+\prop Pour $a>0$ et $b>0$ :
+\begin{itemize}[nosep]
+  \item $\ln(ab)=\ln(a)+\ln(b)$
+  \item $\ln\!\left(\dfrac{a}{b}\right)=\ln(a)-\ln(b)$
+  \item $\ln(a^n)=n\ln(a)$ (pour $n\in\mathbb{Z}$)
+\end{itemize}
+
+\prop Valeurs à connaître : $\ln(1)=0$ et $\ln(e)=1$.
+
+
+\subsection{Représentation graphique}
+\GraphLn
+
+% >>> Basculer sur la colonne de droite <<<
+\switchcolumn
+\setcounter{section}{1} % <-- pour que "Variations" devienne 2.
+
+% ====== COLONNE DROITE ======
+\section{Variations, signe et limites}
+
+\subsection{Dérivées}
+\prop Sur $]0,+\infty[$ :
+\[
+(\ln x)'=\frac{1}{x}
+\]
+$\dfrac{1}{x}>0$ sur $]0,+\infty[$, ainsi $\ln$ est \textbf{strictement croissante}.
+
+\prop Si $u(x)>0$ :
+\[
+(\ln(u(x)))'=\frac{u'(x)}{u(x)}
+\]
+
+\subsection{Tableau de variations}
+\begin{center}
+\begin{tikzpicture}
+  \tkzTabInit{$x$/1, $\ln(x)$/1}{$0^{+}$, $1$, $+\infty$}
+  \tkzTabVar{-/$-\infty$, R/ $0$, +/$+\infty$}
+\end{tikzpicture}
+\end{center}
+
+\subsection{Signe de $\ln$}
+\begin{center}
+\begin{tikzpicture}
+  \tkzTabInit{$x$/1, $\ln(x)$/1}{$0^{+}$, $1$, $+\infty$}
+  \tkzTabLine{, -, z, +, }
+\end{tikzpicture}
+\end{center}
+
+\subsection{Limites}
+\prop
+\[
+\lim_{x\to 0^+}\ln(x)=-\infty
+\qquad\text{et}\qquad
+\lim_{x\to +\infty}\ln(x)=+\infty
+\]
+\rem Asymptote verticale : $x=0$.
+
+% >>> Basculer sur la colonne de droite <<<
+\switchcolumn
+\setcounter{subsection}{4} % <-- pour que "CC" devienne e.
+
+\subsection{Croissance comparée}
+
+\prop Pour tout $\alpha>0$ :
+\[
+\lim_{x\to 0^+} x^{\alpha}\ln(x)=0
+\qquad \text{et} \qquad
+\lim_{x\to +\infty}\frac{\ln(x)}{x^{\alpha}}=0
+\]
+
+\setcounter{section}{2} % <-- pour que "CC" devienne e.
+
+\section{Équations/inéquations avec $\ln$}
+
+\subsection{Méthodes}
+\prop Pour résoudre (avec condition $x>0$) :
+\[
+\ln(x)=k \iff x=e^k
+\]
+\prop Pour comparer (car $\ln$ est croissante sur $]0,+\infty[$) :
+\[
+\ln(x)\le \ln(a) \iff x\le a \quad (x>0,\ a>0)
+\]
+
+
+% ====== PAGE SUIVANTE : COLONNE GAUCHE ======
+\section{À retenir}
+\begin{itemize}
+  \item Domaine : $x>0$. Asymptote verticale : $x=0$
+  \item $\ln(ab)=\ln a+\ln b$ | $\ln(a/b)=\ln a-\ln b$ | $\ln(a^n)=n\ln a$
+  \item Dérivées : $(\ln x)'=1/x$ ; $(\ln(u))'=u'/u$ (si $u>0$)
+  \item Signe : $\ln(x)<0$ sur $]0,1[$ ; $\ln(1)=0$ ; $\ln(x)>0$ si $x>1$
+  \item Les 2 limites de ln et les 2 croissances comparées
+\end{itemize}
+
+\end{paracol}
+\end{document}

@@ -1,0 +1,786 @@
+\documentclass[11pt,a4paper]{article}
+
+% -------------------- Langue / encodage --------------------
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{array}
+
+% -------------------- Mise en page --------------------
+\usepackage{geometry}
+\geometry{
+  a4paper,
+  landscape,
+  left=1.6cm,
+  right=1.6cm,
+  top=1.0cm,
+  bottom=1.2cm
+}
+
+% -------------------- Maths / mise en forme --------------------
+\usepackage{amsmath,amssymb}
+\usepackage{parskip}
+\usepackage[explicit]{titlesec}
+\usepackage[normalem]{ulem}
+\usepackage{titlesec}
+
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+\usepackage[table]{xcolor}
+\usepackage{paracol}
+
+% -------------------- TikZ --------------------
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,intersections}
+
+% -------------------- Variables --------------------
+\newcommand{\FicheTitre}{Mécanique dans un champ de gravitation -- Fiche de cours}
+\newcommand{\Niveau}{Terminale générale -- Physique}
+\newcommand{\Annee}{Année scolaire 2025/2026}
+
+\newcommand{\SiteURL}{https://naoufel-coursparticuliers.netlify.app/}
+\newcommand{\SiteTexte}{naoufel-coursparticuliers.netlify.app}
+
+% -------------------- Footer --------------------
+\pagestyle{fancy}
+\fancyhf{}
+\lfoot{\textit{\Niveau \;--\; \Annee}}
+\cfoot{\thepage/\pageref{LastPage}}
+\rfoot{\href{\SiteURL}{\texttt{\SiteTexte}}}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+% -------------------- Spacing --------------------
+\setlength{\parskip}{4pt}
+\setlength{\parindent}{0pt}
+\setlist[itemize]{leftmargin=*, itemsep=2pt, topsep=2pt}
+
+% -------------------- Titres --------------------
+\titleformat{\section}[hang]
+  {\normalsize\bfseries}
+  {\textcolor{red}{\thesection.}}
+  {0.2em}
+  {\textcolor{red}{\uline{#1}}}
+
+\titleformat{\subsection}[hang]
+  {\normalsize\bfseries}
+  {\hspace*{1.2em}\textcolor{green!60!black}{\thesubsection}}
+  {0.4em}
+  {\textcolor{green!60!black}{\uline{#1}}}
+
+% -------------------- Bandeau titre --------------------
+\newcommand{\TitreBandeau}[1]{%
+  \noindent\hrule
+  \vspace{0.55em}
+  \begin{center}
+    {\LARGE\bfseries #1}
+  \end{center}
+  \vspace{0.55em}
+  \noindent\hrule
+  \vspace{0.9em}
+}
+
+% -------------------- Helpers --------------------
+\newcommand{\defi}{\textbf{Définition :} }
+\newcommand{\prop}{\textbf{Propriété :} }
+\newcommand{\rem}{\textbf{Remarque :} }
+
+
+% ============================
+% Schéma : champ de gravitation
+% ============================
+\newcommand{\SchemaGravitation}{%
+\begin{center}
+\resizebox{0.5\linewidth}{!}{%
+\begin{tikzpicture}[>=Latex, every node/.style={font=\small}]
+
+% Astre
+\fill[gray!20] (0,0) circle (0.7);
+\draw[thick] (0,0) circle (0.7);
+\fill (0,0) circle (2.2pt);
+\node[below left] at (0.1,0) {$O$};
+\node at (-0.15,-1.25) {$(M)$};
+
+% Point P
+\fill (4.8,1.4) circle (2.2pt);
+\node[above right] at (4.8,1.4) {$P$};
+\node[right] at (5.0,1.0) {$(m)$};
+
+% Segment OP
+\draw[thick, dashed] (0,0) -- (4.8,1.4);
+\node[below] at (2.45,0.55) {$R$};
+
+% Vecteur unitaire u (de O vers P)
+\draw[->, thick, blue] (0,0) -- (1.1,0.32);
+\node[blue, above] at (0.9,0.45) {$\vec{u}$};
+
+% Force vers O
+\draw[->, very thick, red] (4.8,1.4) -- (3.35,0.98);
+\node[red, above] at (4.0,1.35) {$\vec{F}$};
+
+% Champ g vers O
+\draw[->, very thick, green!50!black] (4.55,1.05) -- (3.6,0.78);
+\node[green!50!black, below] at (4.05,0.82) {$\vec{g}(P)$};
+
+
+\end{tikzpicture}
+}%
+\end{center}
+}
+
+% ============================
+% ============================
+% ============================
+% Schéma : satellite en mouvement circulaire
+% ============================
+\newcommand{\SchemaSatelliteCirculaire}{%
+\begin{center}
+\resizebox{0.5\linewidth}{!}{%
+\begin{tikzpicture}[>=Latex, every node/.style={font=\small}]
+
+% ----------------------------
+% Paramètres
+% ----------------------------
+\def\R{2.4}      % rayon de l'orbite
+\def\ang{45}     % angle du point P sur l'orbite
+\def\Ra{0.5}     % rayon de l'astre
+
+% ----------------------------
+% Centre et astre
+% ----------------------------
+\fill[orange!35] (0,0) circle (\Ra);
+\draw[thick, orange!70!black] (0,0) circle (\Ra);
+
+% Point O + label décalé
+\fill (0,0) circle (2.2pt);
+\node[below left] at (0.1,0) {$O$};
+
+% ----------------------------
+% Orbite circulaire
+% ----------------------------
+\draw[thick, dashed, gray!60] (0,0) circle (\R);
+
+% ----------------------------
+% Point satellite P sur le cercle
+% ----------------------------
+\coordinate (P) at (\ang:\R);
+\fill (P) circle (2.2pt);
+\node[above right] at (P) {$P$};
+
+% ----------------------------
+% Segment OP en pointillés
+% ----------------------------
+\draw[thick,dashed] (0,0) -- (P);
+\node[below right] at ($(0,0)!0.58!(P)$) {$R$};
+
+% ----------------------------
+% Vecteur u radial
+% ----------------------------
+\draw[->, thick, blue] (0,0) -- ++({\ang}:0.9);
+\node[blue, left, xshift=-1.5pt] at ({\ang}:0.8) {$\vec{u}$};
+
+% ----------------------------
+% Vitesse tangentielle
+% ----------------------------
+\draw[->, thick, green!50!black] (P) -- ++({\ang+90}:0.95);
+\node[green!50!black, above left] at ($(P)+({\ang+90}:0.85)$) {$\vec{v}$};
+
+% ----------------------------
+% Vecteur u_t tangent
+% ----------------------------
+\draw[->, thick, cyan!60!blue] (P) -- ++({\ang+90}:0.70);
+\node[cyan!60!blue, left] at ($(P)+({\ang+90}:0.2)$) {$\vec{u_t}$};
+
+% ----------------------------
+% Vecteur u_n vers le centre
+% ----------------------------
+\draw[->, thick, cyan!60!blue] (P) -- ++({\ang+180}:0.80);
+\node[cyan!60!blue, right] at ($(P)+({\ang+180}:0.55)$) {$\vec{u_n}$};
+
+\end{tikzpicture}%
+}%
+\end{center}%
+}
+
+
+
+% ============================
+% Schéma : orbite elliptique (1re loi de Kepler)
+% ============================
+\newcommand{\SchemaEllipseKepler}{%
+\begin{center}
+\resizebox{0.5\linewidth}{!}{%
+\begin{tikzpicture}[>=Latex, every node/.style={font=\small}]
+
+\def\a{3.2}
+\def\b{1.9}
+\def\c{2.0}
+\def\t{50}
+
+% Ellipse
+\draw[thick, gray!70] (0,0) ellipse [x radius=\a, y radius=\b];
+
+% Grand axe
+\draw[magenta!70,dashed] (-\a,0) -- (\a,0);
+\node[below] at (0,-0.05) {grand axe};
+
+% Centre
+\fill (0,0) circle (1.8pt);
+\node[below] at (0,0.5) {$O$};
+
+% Foyers
+\fill (-\c,0) circle (1.8pt);
+\fill (\c,0) circle (1.8pt);
+\node[above] at (-\c,0.2) {$F$};
+\node[above] at (\c,0) {$F'$};
+
+% Astre au foyer
+\draw[orange!70!black] (-\c,0) circle (0.22);     % cercle creux
+\fill[orange!70!black] (-\c,0) circle (0.05);     % petit point central
+\node[below left] at (-\c,-0.08) {astre};
+
+% Point P sur l'ellipse
+\coordinate (P) at ({\a*cos(\t)},{\b*sin(\t)});
+\fill (P) circle (2pt);
+\node[above right] at (P) {$P$};
+
+% Segments vers les foyers
+\draw[dashed] (-\c,0) -- (P);
+\draw[dashed] (\c,0) -- (P);
+
+% Grand axe
+\draw[<->, magenta!70, thick] (-\a,-2.15) -- (\a,-2.15);
+\node[below, magenta!70] at (0,-2.15) {$2a$};
+
+\end{tikzpicture}%
+}%
+\end{center}%
+}
+
+% ============================
+% Schéma : 2e loi de Kepler (aires balayées)
+% ============================
+\newcommand{\SchemaAiresKepler}{%
+\begin{center}
+\resizebox{0.5\linewidth}{!}{%
+\begin{tikzpicture}[>=Latex, every node/.style={font=\small}]
+
+\def\a{3.3}
+\def\b{2.0}
+\def\c{2.1}
+
+% Ellipse
+\draw[thick, gray!70] (0,0) ellipse [x radius=\a, y radius=\b];
+
+% Foyer
+\fill (-\c,0) circle (2pt);
+\node[below left] at (-\c,0) {$F$};
+
+% Points sur l'ellipse
+\coordinate (P1) at ({\a*cos(-130)},{\b*sin(-130)});
+\coordinate (P2) at ({\a*cos(-35)},{\b*sin(-35)});
+\coordinate (Q1) at ({\a*cos(160)},{\b*sin(160)});
+\coordinate (Q2) at ({\a*cos(125)},{\b*sin(125)});
+
+% Aires balayées
+\fill[blue!20] (-\c,0) -- (P1) arc[start angle=-130,end angle=-35,x radius=\a,y radius=\b] -- cycle;
+\fill[green!20] (-\c,0) -- (Q1) arc[start angle=160,end angle=125,x radius=\a,y radius=\b] -- cycle;
+
+\draw[thick] (-\c,0) -- (P1);
+\draw[thick] (-\c,0) -- (P2);
+\draw[thick] (-\c,0) -- (Q1);
+\draw[thick] (-\c,0) -- (Q2);
+
+\fill (P1) circle (1.8pt);
+\fill (P2) circle (1.8pt);
+\fill (Q1) circle (1.8pt);
+\fill (Q2) circle (1.8pt);
+
+\node[blue!60!black] at (-0.2,-0.95) {$S_1$};
+\node[green!50!black] at (-2.55,0.45) {$S_2$};
+
+\node[right] at (P2) {$P_2$};
+\node[right] at (P1) {$P_1$};
+\node[left] at (Q1) {$P'_2$};
+\node[left] at (Q2) {$P'_1$};
+
+\end{tikzpicture}%
+}%
+\end{center}%
+}
+% ============================
+% Schéma : 3e loi de Kepler
+% ============================
+\newcommand{\SchemaTroisiemeKepler}{%
+\begin{center}
+\resizebox{0.5\linewidth}{!}{%
+\begin{tikzpicture}[>=Latex, every node/.style={font=\small}]
+
+% Paramètres
+\def\ap{3.4}   % demi-grand axe grande orbite
+\def\bp{2.0}   % demi-petit axe grande orbite
+\def\a{1.9}    % demi-grand axe petite orbite
+\def\b{1.15}   % demi-petit axe petite orbite
+\def\c{1.15}   % position du foyer commun
+
+% Grande orbite
+\draw[thick, magenta!80] (0,0) ellipse [x radius=\ap, y radius=\bp];
+
+% Petite orbite
+\draw[thick, olive!80!black] (\c,0) ellipse [x radius=\a, y radius=\b];
+
+% Axe horizontal
+\draw[gray!60] (-\ap,0) -- (\c+\a+0.2,0);
+
+% Astre au foyer commun
+\fill ( \c,0 ) circle (2pt);
+\node[below right] at (\c,0) {$O$};
+
+% Labels périodes
+\node[magenta!80, font=\bfseries\large] at (-1.7,0.9) {Période $T'$};
+\node[olive!80!black, font=\bfseries\large] at (1.15,0.35) {Période $T$};
+
+% Demi-grand axe petite orbite : 2a
+\draw[dashed, olive!80!black] (\c-\a,-0.02) -- (\c-\a,-1.45);
+\draw[dashed, olive!80!black] (\c+\a,-0.02) -- (\c+\a,-1.45);
+\draw[<->, thick, olive!80!black] (\c-\a,-1.20) -- (\c+\a,-1.20);
+\node[olive!80!black, below] at (\c,-1.20) {$2a$};
+
+% Demi-grand axe grande orbite : 2a'
+\draw[dashed, magenta!80] (-\ap,-0.02) -- (-\ap,-2.25);
+\draw[dashed, magenta!80] (\ap,-0.02) -- (\ap,-2.25);
+\draw[<->, thick, magenta!80] (-\ap,-2.20) -- (\ap,-2.20);
+\node[magenta!80, below] at (0,-2.20) {$2a'$};
+
+\end{tikzpicture}%
+}%
+\end{center}%
+}
+
+
+% ============================
+% ============================
+% Schéma : orbite géostationnaire
+% ============================
+\newcommand{\SchemaGeostationnaire}{%
+\begin{center}
+\resizebox{0.65\linewidth}{!}{%
+\begin{tikzpicture}[>=Latex, every node/.style={font=\small}]
+
+\def\Rt{0.9}
+\def\Rorb{4.0}
+\def\tilt{-25}
+\def\ang{-35}
+
+% Orbite géostationnaire (vue en perspective)
+\draw[thick, gray!60, rotate=\tilt] (0,0) ellipse [x radius=4.2, y radius=2.2];
+\node[gray!70] at (-2.7,-1.45) {Orbite};
+\node[gray!70] at (-2.7,-1.95) {géostationnaire};
+
+% Flèche sur l'orbite
+%\draw[->, gray!60, thick] (1.15,-2.15) arc[start angle=300,end angle=255,x radius=2.2,y radius=1.0];
+
+% Terre
+\fill[cyan!20] (0,0) circle (\Rt);
+\draw[thick, cyan!50!black] (0,0) circle (\Rt);
+
+% Centre de la Terre
+\fill (0,0) circle (2pt);
+\node[above left] at (-0.03,-0.07) {$T$};
+
+% Axe de rotation incliné
+\begin{scope}[rotate=-25]
+  \draw[dashed, name path global=axe] (0,-1.5) -- (0,1.5);
+\end{scope}
+
+\node at (0.45,1.45) {Nord};
+\node at (-0.3,-1.35) {Sud};
+
+
+% Équateur en perspective
+\begin{scope}[rotate=-25]
+\draw[thick, red!70] (-\Rt,0) arc[start angle=180,end angle=360,x radius=\Rt,y radius=0.22];
+\draw[thick, red!70, dashed] (\Rt,0) arc[start angle=0,end angle=180,x radius=\Rt,y radius=0.22];
+\end{scope}
+\node[red!70, scale=1.15] at (-1.75,0.35) {Équateur};
+
+% Point sur l'orbite (sur l'ellipse tournée)
+\begin{scope}[rotate=\tilt]
+  \coordinate (S) at ({4.2*cos(\ang)},{2.2*sin(\ang)});
+\end{scope}
+\fill (S) circle (2pt);
+\node[right] at (S) {$S$};
+
+% Point sur la surface terrestre dans la direction de S
+\coordinate (B) at ($(0,0)!\Rt/\Rorb!(S)$);
+
+% Point S sur l'orbite
+\begin{scope}[rotate=\tilt]
+  \coordinate (S) at ({4.2*cos(\ang)},{2.2*sin(\ang)});
+\end{scope}
+\fill (S) circle (2pt);
+\node[right] at (S) {$S$};
+
+% Droite TS
+\path[name path global=TSline] (0,0) -- ($(S)!1.2!(0,0)$);
+
+% Intersection entre TS et l'axe de rotation
+\path[name intersections={of=TSline and axe, by=I}];
+
+% Point B sur la surface terrestre, dans la direction TS
+\coordinate (B) at ($(0,0)!0.25!(S)$);
+
+% RT : de l'axe de rotation à la surface
+\draw[<->, thick, purple!80!black] (I) -- (B);
+\node[purple!80!black, above right] at ($(I)!0.2!(B)$) {$R_T$};
+
+% h_gs : de la surface à l'orbite
+\draw[<->, thick, green!70!black] (B) -- (S);
+\node[green!70!black, above] at ($(B)!0.58!(S)$) {$h_{gs}$};
+
+% r_gs : segment parallèle décalé sous h_gs
+\coordinate (Bbis) at ($(I)+(-0.18,-0.18)$);
+\coordinate (Sbis) at ($(S)+(-0.18,-0.18)$);
+\draw[<->, thick, green!70!black] (Bbis) -- (Sbis);
+\node[green!70!black, below] at ($(Bbis)!0.5!(Sbis)$) {$r_{gs}$};
+
+
+\end{tikzpicture}%
+}%
+\end{center}%
+}
+\begin{document}
+
+\TitreBandeau{Mécanique céleste et satellites -- Fiche de cours}
+
+\columnratio{0.5,0.5}
+\setlength{\columnsep}{1.2cm}
+\setlength{\columnseprule}{0.6pt}
+
+\begin{paracol}{2}
+
+% =====================================================
+% ================= COLONNE GAUCHE ====================
+% =====================================================
+
+\section{Accélération d'un satellite}
+
+\subsection{Champ de gravitation créé par un astre}
+
+Soit un astre de masse $M$, à symétrie sphérique, assimilé à un point matériel placé en son centre de masse $O$.
+
+Un point matériel $P$ de masse $m$, situé à la distance $R=OP$ du centre de l'astre, subit de la part de cet astre une force gravitationnelle attractive.
+
+\prop La force gravitationnelle exercée par l'astre sur l'objet est :
+
+\[
+\vec{F}=-G\frac{Mm}{R^2}\vec{u}
+\]
+
+où :
+
+\begin{itemize}
+\item $G = 6{,}67\times10^{-11}\ \mathrm{N\,m^2\,kg^{-2}}$
+\item $R$ est la distance entre les centres
+\item $\vec{u}$ est un vecteur unitaire radial
+\end{itemize}
+
+\SchemaGravitation
+
+
+\subsection{Champ gravitationnel}
+
+Le champ gravitationnel créé par l'astre au point $P$ est noté $\vec{g}(P)$.
+
+
+\switchcolumn
+%\noindent
+\vspace*{1\baselineskip}
+\setcounter{section}{1}
+\setcounter{subsection}{2}
+
+\defi Le champ gravitationnel est relié à la force gravitationnelle par :
+
+\[
+\vec{F}=m\vec{g}(P)
+\]
+
+
+\prop L'expression du champ gravitationnel au point $P$ est donc :
+
+\[
+\boxed{\vec{g}(P)=-G\frac{M}{R^2}\vec{u}}
+\]
+
+\subsection{Accélération d'un satellite}
+
+Un satellite est un système en mouvement autour d'un astre attracteur sous l'effet du champ gravitationnel créé par celui-ci.
+
+Dans le référentiel d'étude, on applique la deuxième loi de Newton :
+
+\[
+m\vec{a}=\vec{F}
+\]
+
+or $\vec{F}=m\vec{g}(P)$, donc :
+
+\[
+\vec{a}=\vec{g}(P)
+\]
+
+\prop L'accélération du satellite est :
+
+\[
+\boxed{\vec{a}=-G\frac{M}{R^2}\vec{u}}
+\]
+
+Elle est radiale et centripète (dirigée vers le centre de l'astre).
+
+% =====================================================
+% ================= COLONNE DROITE ====================
+% =====================================================
+
+\switchcolumn
+\setcounter{section}{1}
+
+\section{Satellite en mouvement circulaire}
+
+\subsection{Utilisation du repère de Frenet}
+
+Soit un satellite en mouvement circulaire autour du centre $O$ de l'astre attracteur de masse $M$.
+
+La distance $R=OP$ est constante.
+
+On utilise le repère de Frenet :
+
+\begin{itemize}
+\item $\vec{u_t}$ : vecteur unitaire tangent à la trajectoire
+\item $\vec{u_n}$ : vecteur unitaire normal dirigé vers le centre
+\end{itemize}
+
+\SchemaSatelliteCirculaire
+
+En notant $v(t)$ la vitesse du satellite, l'accélération s'écrit :
+
+\[
+\vec{a}=\frac{dv}{dt}\vec{u_t}+\frac{v^2}{R}\vec{u_n}
+\]
+
+\subsection{Mouvement circulaire uniforme}
+
+Pour un mouvement circulaire uniforme, la valeur de la vitesse est constante, donc :
+
+\[
+\frac{dv}{dt}=0
+\]
+
+\switchcolumn
+\vspace*{1\baselineskip}
+\setcounter{section}{2}
+\setcounter{subsection}{2}
+
+L'accélération devient alors :
+
+\[
+\vec{a}=\frac{v^2}{R}\vec{u_n}
+\]
+
+Or, d'après l'étude gravitationnelle précédente :
+
+\[
+\vec{a}=-G\frac{M}{R^2}\vec{u}
+\]
+
+Comme $\vec{u_n}$ et $-\vec{u}$ ont même sens, on identifie les normes :
+
+\[
+\frac{v^2}{R}=G\frac{M}{R^2}
+\]
+
+\subsection{Vitesse d'un satellite}
+
+On en déduit :
+
+\[
+v^2=\frac{GM}{R}
+\]
+
+\prop La vitesse d'un satellite en orbite circulaire est :
+
+\[
+\boxed{v=\sqrt{\frac{GM}{R}}}
+\]
+
+\subsection{Période de révolution}
+
+La période de révolution $T$ d'un satellite est la durée qu'il met pour effectuer un tour complet autour de l'astre attracteur.
+
+Pour un mouvement circulaire de rayon $R$, la distance parcourue en un tour est  le périmètre du grand cercle :
+
+\[
+2\pi R
+\]
+
+Comme la vitesse est constante :
+
+\[
+v=\frac{2\pi R}{T}
+\]
+
+En remplaçant $v$ par $\sqrt{\dfrac{GM}{R}}$, on obtient :
+
+\[
+\frac{2\pi R}{T}=\sqrt{\frac{GM}{R}}
+\]
+
+\switchcolumn
+\vspace*{0.4\baselineskip}
+\setcounter{section}{2}
+\setcounter{subsection}{4}
+
+
+puis :
+
+\[
+T^2=\frac{4\pi^2r^3}{GM}
+\]
+
+\prop La période de révolution vérifie :
+
+\[
+\boxed{T=2\pi\sqrt{\frac{R^3}{GM}}}
+\]
+
+\rem Cette relation pourra être reliée ensuite aux lois de Kepler.
+
+
+% =====================================================
+% ================= COLONNE GAUCHE ====================
+% =====================================================
+
+\section{Première loi de Kepler}
+
+\subsection{Loi des orbites}
+
+\prop Les orbites des satellites sont des ellipses dont le centre de l'astre attracteur occupe un des foyers.
+
+\SchemaEllipseKepler
+
+\rem Une orbite circulaire est un cas particulier d'ellipse.
+
+\subsection{Vocabulaire}
+
+\begin{itemize}
+\item Une ellipse possède 2 foyers, définie géométriquement comme tous les points P tel que FP +F'P=2a.
+\item Le centre de l'astre attracteur se trouve en un foyer.
+\item Le plus grand diamètre de l'ellipse est appelé \textbf{grand axe}.
+\item Sa moitié est le \textbf{demi-grand axe}, noté $a$.
+\end{itemize}
+
+\switchcolumn
+\setcounter{section}{3}
+
+
+\section{Deuxième loi de Kepler}
+
+\subsection{Loi des aires}
+
+\prop Le segment reliant le centre de l'astre attracteur au satellite balaie des surfaces d'aires égales pendant des durées égales.
+
+\SchemaAiresKepler
+
+\rem Cela signifie que le satellite ne se déplace pas toujours à la même vitesse sur une orbite elliptique.
+
+Il va plus vite lorsqu'il est proche de l'astre attracteur, et plus lentement lorsqu'il en est éloigné.
+
+% =====================================================
+% ================= p3 ====================
+% =====================================================
+
+
+\section{Troisième loi de Kepler}
+
+\subsection{Loi des périodes}
+
+\prop Le quotient du carré de la période T de révolution d'un satellite par le cube du demi-grand axe $a$ de son orbite est indépendant du satellite et ne dépend que de la masse $M$ de l'astre attracteur.
+
+\[
+\boxed{\frac{T^2}{a^3}={constante}}
+\]
+
+\SchemaTroisiemeKepler
+
+\switchcolumn
+\setcounter{section}{5}
+\setcounter{subsection}{1}
+
+\rem Pour tous les satellites en orbite autour d'un même astre attracteur, la quantité $\dfrac{T^2}{a^3}$ est la même.
+
+
+\subsection{Cas particulier d'une orbite circulaire}
+
+Si l'orbite est circulaire, alors le rayon $R$ de l'orbite joue le rôle du demi-grand axe :
+
+\[
+a=R
+\]
+
+On montre que la troisième loi de Kepler s'écrit aussi :
+
+\[
+\boxed{\frac{T^2}{R^3}=\frac{4\pi^2}{GM}}
+\]
+
+
+\section{Application : satellite géostationnaire}
+
+\subsection{Définition}
+
+\prop Un satellite géostationnaire est un satellite artificiel de la Terre fixe dans le référentiel terrestre.
+
+\subsection{Conditions}
+
+Pour qu'un satellite soit géostationnaire :
+
+\begin{itemize}
+\item son orbite doit être circulaire ;
+\item son orbite doit être dans le plan de l'équateur ;
+\item sa période doit être égale au jour sidéral :
+\[
+T = T_{\mathrm{sid}} = 86\,164\ \text{s}
+\]
+\end{itemize}
+
+\switchcolumn
+\setcounter{section}{6}
+\setcounter{subsection}{2}
+
+\SchemaGeostationnaire
+
+\subsection{Application}
+
+En appliquant la troisième loi de Kepler :
+
+\[
+\frac{T^2}{r_{gs}^3}=\frac{4\pi^2}{GM_T}
+\]
+
+on obtient pour l'orbite géostationnaire :
+
+\[
+r_{gs}\approx 4{,}2\times10^7\ \text{m}
+\]
+
+et donc :
+
+\[
+h_{gs}=r_{gs}-R_T \approx 3{,}6\times10^4\ \text{km}
+\]
+
+Un satellite géostationnaire est donc situé à environ \(36\,000\) km au-dessus de l'équateur.
+
+
+\end{paracol}
+
+\end{document}
