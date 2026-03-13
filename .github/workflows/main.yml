@@ -13,7 +13,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Compile LaTeX
+      - name: Compile all LaTeX files
         uses: xu-cheng/latex-action@v3
         with:
-          root_file: latex/test.tex
+          root_file: latex/**/*.tex
