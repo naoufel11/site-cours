@@ -1,0 +1,66 @@
+[
+  {
+    "path": "pdfs/Lycee/Seconde/Maths/fonctions-affines-cours.pdf",
+    "filename": "fonctions-affines-cours.pdf",
+    "slug": "fonctions-affines-cours",
+    "niveau": "Lycee",
+    "classe": "Seconde",
+    "matiere": "Maths"
+  },
+  {
+    "path": "pdfs/Lycee/Seconde/Maths/fonctions-affines-exos.pdf",
+    "filename": "fonctions-affines-exos.pdf",
+    "slug": "fonctions-affines-exos",
+    "niveau": "Lycee",
+    "classe": "Seconde",
+    "matiere": "Maths"
+  },
+  {
+    "path": "pdfs/Lycee/Terminale/Maths/complement-de-derivation-fiche-cours.pdf",
+    "filename": "complement-de-derivation-fiche-cours.pdf",
+    "slug": "complement-de-derivation-fiche-cours",
+    "niveau": "Lycee",
+    "classe": "Terminale",
+    "matiere": "Maths"
+  },
+  {
+    "path": "pdfs/Lycee/Terminale/Maths/fonctions trigonometriques-fiche-cours.pdf",
+    "filename": "fonctions trigonometriques-fiche-cours.pdf",
+    "slug": "fonctions trigonometriques-fiche-cours",
+    "niveau": "Lycee",
+    "classe": "Terminale",
+    "matiere": "Maths"
+  },
+  {
+    "path": "pdfs/Lycee/Terminale/Maths/ln-fiche-cours.pdf",
+    "filename": "ln-fiche-cours.pdf",
+    "slug": "ln-fiche-cours",
+    "niveau": "Lycee",
+    "classe": "Terminale",
+    "matiere": "Maths"
+  },
+  {
+    "path": "pdfs/Lycee/Terminale/Maths/primitives-equadiff-fiche-cours.pdf",
+    "filename": "primitives-equadiff-fiche-cours.pdf",
+    "slug": "primitives-equadiff-fiche-cours",
+    "niveau": "Lycee",
+    "classe": "Terminale",
+    "matiere": "Maths"
+  },
+  {
+    "path": "pdfs/Lycee/Terminale/Physique/Mécanique céleste et satellites.pdf",
+    "filename": "Mécanique céleste et satellites.pdf",
+    "slug": "Mécanique céleste et satellites",
+    "niveau": "Lycee",
+    "classe": "Terminale",
+    "matiere": "Physique"
+  },
+  {
+    "path": "pdfs/test.pdf",
+    "filename": "test.pdf",
+    "slug": "test",
+    "niveau": "test.pdf",
+    "classe": "",
+    "matiere": ""
+  }
+]
