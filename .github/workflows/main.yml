@@ -54,7 +54,7 @@ jobs:
         run: |
           while IFS= read -r file; do
             echo "Compilation de $file"
-            latexmk -pdf -interaction=nonstopmode -halt-on-error "$file"
+            latexmk -lualatex -interaction=nonstopmode -halt-on-error "$file"
           done < changed_tex.txt
 
       - name: Copy PDFs to pdfs/
